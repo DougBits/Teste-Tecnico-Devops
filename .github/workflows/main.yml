@@ -29,7 +29,7 @@ jobs:
 #   Vamos então verificar as vulnerabilidades de segurança dessa imagem. Existem diversas aplicações que fazem isso, mas por ser um projeto simples optei por usar o trivy
       - name: Verifica as vulnerabilidades da imagem
         run: |
-          docker run --rm -v /vars/run/docker.sock:/vars/run/docker.sock \
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
             aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL \
             ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }}
   
