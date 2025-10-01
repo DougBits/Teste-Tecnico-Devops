@@ -28,6 +28,12 @@ RUN cd TesteTecnico-Devops-app-php && unzip app.zip -d /temp/app
 # Agora subimos a imagem final do apache
 FROM php:8.2-apache
 
+# Vamos atualizar a imagem. Isso evita vulnerabilidades de segurança já conhecidas.
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Criamos um usuário não-root para segurança
 RUN useradd -m phpuser
 
