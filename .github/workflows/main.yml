@@ -19,26 +19,26 @@ jobs:
       - name: Login no Docker DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKERHUB_USER }}
+          username: ${{ vars.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
   
 #   Agora vamos buildar a nossa imagem localmente (no Github) e colocamos uma tag que correponda ao SHA do commit atual, para evitar que se repita e possa ser identificado depois
       - name: Buildando imagem
-        run: docker build -t ${{ env.DOCKERHUB_USER }}/php-app:${{ github.sha }} .
+        run: docker build -t ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }} .
   
 #   Vamos então verificar as vulnerabilidades de segurança dessa imagem. Existem diversas aplicações que fazem isso, mas por ser um projeto simples optei por usar o trivy
       - name: Verifica as vulnerabilidades da imagem
         run: |
-          docker run --rm -v /env/run/docker.sock:/env/run/docker.sock \
+          docker run --rm -v /vars/run/docker.sock:/vars/run/docker.sock \
             aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL \
-            ${{ env.DOCKERHUB_USER }}/php-app:${{ github.sha }}
+            ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }}
   
 #   Uma vez validado que nossa imagem está segura, então fazemos o push dela para o registry público do DockerHub
       - name: Push para o DockerHub
         run: |
-          docker push ${{ env.DOCKERHUB_USER }}/php-app:${{ github.sha }}
-          docker tag ${{ env.DOCKERHUB_USER }}/php-app:${{ github.sha }} ${{ env.DOCKERHUB_USER }}/php-app:latest
-          docker push ${{ env.DOCKERHUB_USER }}/php-app:latest
+          docker push ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }}
+          docker tag ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }} ${{ vars.DOCKERHUB_USER }}/php-app:latest
+          docker push ${{ vars.DOCKERHUB_USER }}/php-app:latest
 
 
 
