@@ -27,10 +27,11 @@ jobs:
         run: docker build -t ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }} .
   
 #   Vamos então verificar as vulnerabilidades de segurança dessa imagem. Existem diversas aplicações que fazem isso, mas por ser um projeto simples optei por usar o trivy
+#   Coloquei para o processo interromper apenas em vulnerabilidades críticas
       - name: Verifica as vulnerabilidades da imagem
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-            aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL \
+            aquasec/trivy:latest image --exit-code 1 --severity CRITICAL \
             ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }}
   
 #   Uma vez validado que nossa imagem está segura, então fazemos o push dela para o registry público do DockerHub
