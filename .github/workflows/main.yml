@@ -3,7 +3,7 @@ name: Workflow Teste Técnico Devops - Push Image
 # Definimos que este Workflow será ativado sempre que ocorrer um push na branch main
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 # Iniciamos os Jobs
 jobs:
