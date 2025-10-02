@@ -1,0 +1,30 @@
+# Esse deployment é simples e objetivo, criando 2 pods com a imagem que criamos
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-app
+  labels:
+    app: php-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: php-app
+  template:
+    metadata:
+      labels:
+        app: php-app
+    spec:
+      containers:
+        - name: php-app
+          image: dougbits/php-app:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

@@ -15,7 +15,7 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
   
-#   Vamos logar no DockerHub. Aqui deve-se sempre utilizar secrets para não expor credenciais/tokens.
+#   Vamos logar no DockerHub. Aqui deve-se sempre utilizar secrets para não expor credenciais/tokens. No nome de usuário não há problema de usar vars pois é o nome do usuário (que é público).
       - name: Login no Docker DockerHub
         uses: docker/login-action@v3
         with:
@@ -34,14 +34,9 @@ jobs:
             aquasec/trivy:latest image --exit-code 1 --severity CRITICAL \
             ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }}
   
-#   Uma vez validado que nossa imagem está segura, então fazemos o push dela para o registry público do DockerHub
+#   Uma vez validado que nossa imagem está segura, então fazemos o push dela para o registry público do DockerHub, deixando a versão com tag de commmit e com tag latest
       - name: Push para o DockerHub
         run: |
           docker push ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }}
           docker tag ${{ vars.DOCKERHUB_USER }}/php-app:${{ github.sha }} ${{ vars.DOCKERHUB_USER }}/php-app:latest
           docker push ${{ vars.DOCKERHUB_USER }}/php-app:latest
-
-
-
-
-
